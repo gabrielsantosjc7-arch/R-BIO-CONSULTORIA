@@ -1,0 +1,47 @@
+---
+title: "Análisis exploratorios"
+author: "Santos G"
+format: pdf
+editor: visual
+code-overflow: wrap
+toc: true
+toc-depth: 2
+echo: true
+warning: false
+message: false
+lang: es
+fig-width: 7
+fig-height: 5
+---
+
+```{r}
+# Librerías 
+library(tidyverse)   # Manipulación de datos: dplyr, tidyr, readr
+library(janitor)     # Limpieza: clean_names(), tabyl()
+library(ggplot2)     # Gráficos profesionales
+library(kableExtra)  # Tablas formateadas para informes
+library(skimr)       # EDA rápido y completo (skim())
+library(GGally)      # Matriz de gráficos para variables múltiples
+library(corrplot)    # Visualización de matrices de correlación
+library(vegan)       # Funciones para PCA/NMDS
+library(broom)       # Limpiar salidas estadísticas a data.frames
+library(effectsize)  # Tamaños de efecto
+library(randomForest) # Ejemplo de importancia de variables 
+```
+
+Se realizó una exploración y control de calidad de los datos de entrada para identificar variables relevantes, evaluar supuestos básicos y priorizar rutas analíticas. El objetivo es generar una guía reproducible que permita a futuros analistas (o a un equipo de consultoría) replicar y ampliar los análisis según objetivos específicos (p. ej. comparar tratamientos, modelar abundancias o construir índices de condición).
+
+```{r}
+#| label: data-load
+# Carga de datos (ejemplo iris) y limpieza mínima
+data("iris")
+df <- as_tibble(iris) %>% 
+  janitor::clean_names()   # convierte a snake_case: sepal_length, etc.
+
+# Información básica
+n_rows <- nrow(df); n_cols <- ncol(df)
+glimpse(df)
+skim(df)
+```
+
+El dataset contiene **N = `r n_rows`** observaciones y **`r n_cols`** variables. Las variables cuantitativas son: `sepal_length`, `sepal_width`, `petal_length`, `petal_width` (continuas, en cm). La variable categórica `species` indica tres grupos balanceados (n = 50 por grupo). No se detectaron valores faltantes ni duplicados tras una inspección inicial. Esta estructura (muestras balanceadas y variables continuas sin NA) permite aplicar análisis univariados, comparativos y multivariados con mínima preprocesamiento.
