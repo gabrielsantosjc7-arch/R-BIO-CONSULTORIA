@@ -1,0 +1,4 @@
+"0","#| label: ggpairs # Ver distribuciones y relaciones bivariadas "
+"0","#| fig-cap: ""Matriz de dispersión y correlación de las variables cuantitativas (Figura 1)."""
+"0","num_df <- df %>% select(where(is.numeric)) "
+"0","GGally::ggpairs(num_df, upper = list(continuous = wrap(""cor"", size = 3))) "
