@@ -45,3 +45,11 @@ skim(df)
 ```
 
 El dataset contiene **N = `r n_rows`** observaciones y **`r n_cols`** variables. Las variables cuantitativas son: `sepal_length`, `sepal_width`, `petal_length`, `petal_width` (continuas, en cm). La variable categórica `species` indica tres grupos balanceados (n = 50 por grupo). No se detectaron valores faltantes ni duplicados tras una inspección inicial. Esta estructura (muestras balanceadas y variables continuas sin NA) permite aplicar análisis univariados, comparativos y multivariados con mínima preprocesamiento.
+
+## 3. Matriz de correlaciones y distribuciones entre variables numéricas
+
+```{r}
+#| label: ggpairs # Ver distribuciones y relaciones bivariadas 
+num_df <- df %>% select(where(is.numeric)) 
+GGally::ggpairs(num_df, upper = list(continuous = wrap("cor", size = 3))) 
+
