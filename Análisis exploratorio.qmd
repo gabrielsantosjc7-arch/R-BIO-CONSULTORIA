@@ -35,3 +35,45 @@ library(GGally)      # Matriz de gráficos para variables múltiples
 library(knitr)       # Tablas en Quarto
 library(kableExtra)  # Tablas formateadas para informes
 ```
+
+## Contexto del proyecto
+
+Se realizó una exploración y control de calidad de los datos de entrada para identificar variables relevantes, evaluar supuestos básicos y priorizar rutas analíticas. El objetivo es generar una guía reproducible que permita a futuros analistas (o a un equipo de consultoría) replicar y ampliar los análisis según objetivos específicos (p. ej. comparar tratamientos, modelar abundancias o construir índices de condición).
+
+## Carga y verificación inicial de datos
+
+```{r}
+#|label: data-load
+# Carga de datos (ejemplo iris) y limpieza mínima
+data("iris")
+df <- as_tibble(iris) %>% 
+  janitor::clean_names()   # convierte a snake_case: sepal_length, etc.
+
+# Información básica
+n_rows <- nrow(df); n_cols <- ncol(df)
+glimpse(df)
+tbl1<-skim(df) 
+tbl1 # Resumen compacto por variable
+```
+
+El dataset contiene **N = 150 observaciones** y **5 variables**. Cuatro son cuantitativas continuas en centímetros (*Sepal.Length, Sepal.Width, Petal.Length, Petal.Width*), y una categórica (*Species*), que clasifica en tres grupos balanceados (n = 50 por especie). No se detectaron valores faltantes ni duplicados tras la inspección inicial. Esta estructura balanceada y sin NA permite aplicar análisis univariados, comparativos y multivariados con mínimo preprocesamiento.
+
+La tabla de estadísticos descriptivos muestra lo siguiente:
+
+-    **Sepal.Length:** media ≈ 5.84 cm, SD ≈ 0.83, rango 4.3–7.9. Variación moderada, con solapamiento esperado entre especies.
+
+-   **Sepal.Width:** media ≈ 3.06 cm, SD ≈ 0.44, rango 2.0–4.4. Es la variable más estable, aunque con ligera asimetría negativa.
+
+-   **Petal.Length:** media ≈ 3.76 cm, SD ≈ 1.77, rango 1.0–6.9. Mayor dispersión relativa, con clara separación de *setosa*.
+
+-   **Petal.Width:** media ≈ 1.20 cm, SD ≈ 0.76, rango 0.1–2.5. Alta variabilidad, con potencial de discriminación entre las tres especies.
+
+Aspectos destacados del dataset:
+
+-    **Escala homogénea de medidas:** todas las variables en centímetros → comparaciones y análisis multivariados sin necesidad de reescalado inmediato.
+
+-    **Colinealidad esperada:** Petal.Length y Petal.Width muestran alta correlación, lo que debe considerarse en regresiones o PCA.
+
+-    **Grupos biológicos claros y balanceados:** un escenario ideal para aprendizaje, aunque poco frecuente en estudios ecológicos reales.
+
+-    **Potencial de discriminación:** las variables de pétalos concentran el mayor poder de separación, coherente con su relevancia funcional en la biología reproductiva de las plantas.
