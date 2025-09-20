@@ -406,7 +406,7 @@ la inspección inicial. Esta estructura balanceada y sin NA permite
 aplicar análisis univariados, comparativos y multivariados con mínimo
 preprocesamiento.
 
-La tabla de estadísticos descriptivos muestra lo siguiente:
+La \textbf{Tabla 1} de estadísticos descriptivos muestra lo siguiente:
 
 \begin{itemize}
 \item
@@ -440,6 +440,218 @@ Aspectos destacados del dataset:
   \textbf{Potencial de discriminación:} las variables de pétalos
   concentran el mayor poder de separación, coherente con su relevancia
   funcional en la biología reproductiva de las plantas.
+\end{itemize}
+
+\section{Matriz de correlaciones y distribuciones entre variables
+numéricas}\label{matriz-de-correlaciones-y-distribuciones-entre-variables-numuxe9ricas}
+
+La \textbf{Figura 1} combina tres tipos de información: distribuciones
+univariadas, relaciones bivariadas y correlacciones númericas.
+
+\begin{Shaded}
+\begin{Highlighting}[numbers=left,,]
+\NormalTok{num\_df }\OtherTok{\textless{}{-}}\NormalTok{ df }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{select}\NormalTok{(}\FunctionTok{where}\NormalTok{(is.numeric))}
+\NormalTok{Fig1}\OtherTok{\textless{}{-}}\NormalTok{ GGally}\SpecialCharTok{::}\FunctionTok{ggpairs}\NormalTok{(}
+\NormalTok{  df,}
+  \AttributeTok{columns =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{4}\NormalTok{, }\CommentTok{\# solo variables numéricas}
+  \AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ species), }\CommentTok{\# color por especie}
+  \AttributeTok{upper =} \FunctionTok{list}\NormalTok{(}\AttributeTok{continuous =} \FunctionTok{wrap}\NormalTok{(}\StringTok{"cor"}\NormalTok{, }\AttributeTok{size =} \DecValTok{3}\NormalTok{)),}
+  \AttributeTok{diag =} \FunctionTok{list}\NormalTok{(}\AttributeTok{continuous =} \FunctionTok{wrap}\NormalTok{(}\StringTok{"densityDiag"}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.6}\NormalTok{))}
+\NormalTok{)}
+\NormalTok{Fig1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{Análisis-exploratorio_files/figure-pdf/ggpairs-1.pdf}}
+
+}
+
+\caption{Matriz de dispersión y correlación de las variables
+cuantitativas.}
+
+\end{figure}%
+
+\subsection{Distribuciones
+univariadas}\label{distribuciones-univariadas}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Sepal.Length}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Setosa}: concentrada en valores bajos (4.3 - 5.8 cm), muy
+    homogénea.\\
+  \item
+    \emph{Versicolor}: rango intermedio (≈ 4.9 - 7.0 cm).\\
+  \item
+    \emph{Virginica}: valores altos (≈ 4.9 - 7.9 cm), con ligera
+    superposición con Versicolor.\\
+  \item
+    \textbf{Interpretación}: útil para separar \emph{Setosa}, pero
+    \emph{Versicolor} y \emph{Virginica} se solapan.
+  \end{itemize}
+\item
+  \textbf{Sepal.Width}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Distribución amplia en todas las especies.\\
+  \item
+    \emph{Setosa} tiende a mayores valores promedio, pero con
+    solapamiento considerable.\\
+  \item
+    \textbf{Interpretación}: poco poder discriminante, refleja
+    variabilidad natural en la anchura del sépalo.
+  \end{itemize}
+\item
+  \textbf{Petal.Length}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Setosa}: valores muy bajos (≈ 1.0 - 1.9 cm), sin solapamiento
+    con las otras especies.\\
+  \item
+    \emph{Versicolor}: rango medio (≈ 3.0 - 5.1 cm).\\
+  \item
+    \emph{Virginica}: valores altos (≈ 4.5 - 6.9 cm).\\
+  \item
+    \textbf{Interpretación}: variable clave, separa \emph{Setosa} y
+    discrimina bastante bien \emph{Versicolor} vs \emph{Virginica}.
+  \end{itemize}
+\item
+  \textbf{Petal.Width}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Setosa}: valores muy bajos (≈ 0.1 - 0.6 cm).\\
+  \item
+    \emph{Versicolor}: rango medio (≈ 1.0 - 1.8 cm).\\
+  \item
+    \emph{Virginica}: valores altos (≈ 1.4 - 2.5 cm).\\
+  \item
+    \textbf{Interpretación}: la más robusta para separar las tres
+    especies, casi sin solapamiento.
+  \end{itemize}
+\end{itemize}
+
+\subsection{Relaciones bivariadas}\label{relaciones-bivariadas}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Sepal.Length vs Sepal.Width}: gran solapamiento entre
+  especies, con nubes de puntos mezcladas. \emph{Setosa} muestra ligera
+  tendencia a sépalos más anchos.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{Interpretación}: baja capacidad de discriminación.
+  \end{itemize}
+\item
+  \textbf{Sepal.Length vs Petal.Length}: patrón positivo moderado.
+  \emph{Setosa} queda claramente apartada (pétalos muy cortos).
+  \emph{Versicolor} y \emph{Virginica} siguen una línea ascendente, con
+  solapamiento parcial.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{Interpretación}: ayuda a diferenciar \emph{Setosa}, pero no
+    tanto entre las otras dos.
+  \end{itemize}
+\item
+  \textbf{Sepal.Length vs Petal.Width}: tendencia positiva clara.
+  \emph{Setosa} aislada (pétalos estrechos). \emph{Virginica} tiende a
+  valores más altos.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{Interpretación}: más útil que \emph{Sepal.Length} solo, pero
+    aún con solapamientos.
+  \end{itemize}
+\item
+  \textbf{Sepal.Width vs Petal.Length}: relación débil, nubes muy
+  mezcladas. \emph{Setosa} separada por bajos valores de pétalo, no por
+  el sépalo.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{Interpretación}: variable \emph{Sepal.Width} poco
+    informativa.
+  \end{itemize}
+\item
+  \textbf{Sepal.Width vs Petal.Width}: relación débil, con gran
+  dispersión. \emph{Setosa} se distingue porque tiene pétalos angostos,
+  no por anchura del sépalo.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{Interpretación}: no aporta discriminación extra.
+  \end{itemize}
+\item
+  \textbf{Petal.Length vs Petal.Width}: relación lineal muy fuerte, tres
+  grupos claramente separados. \emph{Setosa} aislada en valores bajos;
+  \emph{Versicolor} intermedia; \emph{Virginica} en el rango alto.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{Interpretación}: la combinación de estas dos variables es la
+    mejor para clasificar especies.
+  \end{itemize}
+\end{itemize}
+
+\subsection{Correlaciones numéricas}\label{correlaciones-numuxe9ricas}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Petal.Length vs Petal.Width}: r ≈ 0.96 (correlación muy alta).
+  Variables casi redundantes, pero en conjunto definen un espacio
+  morfológico clave.\\
+\item
+  \textbf{Sepal.Length vs Petal.Length}: r ≈ 0.87 (correlación fuerte).
+  A mayor sépalo, mayor pétalo, patrón general de tamaño.\\
+\item
+  \textbf{Sepal.Length vs Petal.Width}: r ≈ 0.82 (correlación alta).
+  También refleja el gradiente de tamaño floral.\\
+\item
+  \textbf{Sepal.Width con el resto}: correlaciones bajas (r entre -0.4 y
+  0.3). Confirma que aporta poca información discriminante.
+\end{itemize}
+
+\subsection{Interpretación ecológica
+general}\label{interpretaciuxf3n-ecoluxf3gica-general}
+
+\begin{itemize}
+\tightlist
+\item
+  Los \textbf{pétalos} son rasgos reproductivos clave: su longitud y
+  anchura diferencian a las especies porque están ligados a estrategias
+  de atracción de polinizadores.\\
+\item
+  Los \textbf{sépalos}, en cambio, son más plásticos y menos
+  específicos, lo que explica su bajo poder discriminante.\\
+\item
+  La \textbf{correlación entre variables de pétalo} refleja que ambas
+  describen el mismo fenómeno biológico (tamaño floral), pero su
+  combinación refuerza la clasificación.\\
+\item
+  En un contexto real de ecología vegetal, esto sugiere que la
+  diferenciación entre especies del género \emph{Iris} depende más de
+  rasgos reproductivos (pétalos) que de rasgos de soporte (sépalos).
 \end{itemize}
 
 

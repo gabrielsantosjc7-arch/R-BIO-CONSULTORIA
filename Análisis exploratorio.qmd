@@ -58,7 +58,7 @@ tbl1 # Resumen compacto por variable
 
 El dataset contiene **N = 150 observaciones** y **5 variables**. Cuatro son cuantitativas continuas en centímetros (*Sepal.Length, Sepal.Width, Petal.Length, Petal.Width*), y una categórica (*Species*), que clasifica en tres grupos balanceados (n = 50 por especie). No se detectaron valores faltantes ni duplicados tras la inspección inicial. Esta estructura balanceada y sin NA permite aplicar análisis univariados, comparativos y multivariados con mínimo preprocesamiento.
 
-La tabla de estadísticos descriptivos muestra lo siguiente:
+La **Tabla 1** de estadísticos descriptivos muestra lo siguiente:
 
 -    **Sepal.Length:** media ≈ 5.84 cm, SD ≈ 0.83, rango 4.3–7.9. Variación moderada, con solapamiento esperado entre especies.
 
@@ -77,3 +77,72 @@ Aspectos destacados del dataset:
 -    **Grupos biológicos claros y balanceados:** un escenario ideal para aprendizaje, aunque poco frecuente en estudios ecológicos reales.
 
 -    **Potencial de discriminación:** las variables de pétalos concentran el mayor poder de separación, coherente con su relevancia funcional en la biología reproductiva de las plantas.
+
+## Matriz de correlaciones y distribuciones entre variables numéricas
+
+La **Figura 1** combina tres tipos de información: distribuciones univariadas, relaciones bivariadas y correlacciones númericas.
+
+```{r}
+#| label: ggpairs
+#| fig-cap: "Matriz de dispersión y correlación de las variables cuantitativas."
+num_df <- df %>% select(where(is.numeric))
+Fig1<- GGally::ggpairs(
+  df,
+  columns = 1:4, # solo variables numéricas
+  mapping = aes(color = species), # color por especie
+  upper = list(continuous = wrap("cor", size = 3)),
+  diag = list(continuous = wrap("densityDiag", alpha = 0.6))
+)
+Fig1
+```
+
+### Distribuciones univariadas
+
+-   **Sepal.Length**:
+    -   *Setosa*: concentrada en valores bajos (4.3 - 5.8 cm), muy homogénea.\
+    -   *Versicolor*: rango intermedio (≈ 4.9 - 7.0 cm).\
+    -   *Virginica*: valores altos (≈ 4.9 - 7.9 cm), con ligera superposición con Versicolor.\
+    -   **Interpretación**: útil para separar *Setosa*, pero *Versicolor* y *Virginica* se solapan.
+-   **Sepal.Width**:
+    -   Distribución amplia en todas las especies.\
+    -   *Setosa* tiende a mayores valores promedio, pero con solapamiento considerable.\
+    -   **Interpretación**: poco poder discriminante, refleja variabilidad natural en la anchura del sépalo.
+-   **Petal.Length**:
+    -   *Setosa*: valores muy bajos (≈ 1.0 - 1.9 cm), sin solapamiento con las otras especies.\
+    -   *Versicolor*: rango medio (≈ 3.0 - 5.1 cm).\
+    -   *Virginica*: valores altos (≈ 4.5 - 6.9 cm).\
+    -   **Interpretación**: variable clave, separa *Setosa* y discrimina bastante bien *Versicolor* vs *Virginica*.
+-   **Petal.Width**:
+    -   *Setosa*: valores muy bajos (≈ 0.1 - 0.6 cm).\
+    -   *Versicolor*: rango medio (≈ 1.0 - 1.8 cm).\
+    -   *Virginica*: valores altos (≈ 1.4 - 2.5 cm).\
+    -   **Interpretación**: la más robusta para separar las tres especies, casi sin solapamiento.
+
+### Relaciones bivariadas
+
+-   **Sepal.Length vs Sepal.Width**: gran solapamiento entre especies, con nubes de puntos mezcladas. *Setosa* muestra ligera tendencia a sépalos más anchos.
+    -   **Interpretación**: baja capacidad de discriminación.
+-   **Sepal.Length vs Petal.Length**: patrón positivo moderado. *Setosa* queda claramente apartada (pétalos muy cortos). *Versicolor* y *Virginica* siguen una línea ascendente, con solapamiento parcial.
+    -   **Interpretación**: ayuda a diferenciar *Setosa*, pero no tanto entre las otras dos.
+-   **Sepal.Length vs Petal.Width**: tendencia positiva clara. *Setosa* aislada (pétalos estrechos). *Virginica* tiende a valores más altos.
+    -   **Interpretación**: más útil que *Sepal.Length* solo, pero aún con solapamientos.
+-   **Sepal.Width vs Petal.Length**: relación débil, nubes muy mezcladas. *Setosa* separada por bajos valores de pétalo, no por el sépalo.
+    -   **Interpretación**: variable *Sepal.Width* poco informativa.
+-   **Sepal.Width vs Petal.Width**: relación débil, con gran dispersión. *Setosa* se distingue porque tiene pétalos angostos, no por anchura del sépalo.
+    -   **Interpretación**: no aporta discriminación extra.
+-   **Petal.Length vs Petal.Width**: relación lineal muy fuerte, tres grupos claramente separados. *Setosa* aislada en valores bajos; *Versicolor* intermedia; *Virginica* en el rango alto.
+    -   **Interpretación**: la combinación de estas dos variables es la mejor para clasificar especies.
+
+### Correlaciones numéricas
+
+-   **Petal.Length vs Petal.Width**: r ≈ 0.96 (correlación muy alta). Variables casi redundantes, pero en conjunto definen un espacio morfológico clave.\
+-   **Sepal.Length vs Petal.Length**: r ≈ 0.87 (correlación fuerte). A mayor sépalo, mayor pétalo, patrón general de tamaño.\
+-   **Sepal.Length vs Petal.Width**: r ≈ 0.82 (correlación alta). También refleja el gradiente de tamaño floral.\
+-   **Sepal.Width con el resto**: correlaciones bajas (r entre -0.4 y 0.3). Confirma que aporta poca información discriminante.
+
+### Interpretación ecológica general
+
+-   Los **pétalos** son rasgos reproductivos clave: su longitud y anchura diferencian a las especies porque están ligados a estrategias de atracción de polinizadores.\
+-   Los **sépalos**, en cambio, son más plásticos y menos específicos, lo que explica su bajo poder discriminante.\
+-   La **correlación entre variables de pétalo** refleja que ambas describen el mismo fenómeno biológico (tamaño floral), pero su combinación refuerza la clasificación.\
+-   En un contexto real de ecología vegetal, esto sugiere que la diferenciación entre especies del género *Iris* depende más de rasgos reproductivos (pétalos) que de rasgos de soporte (sépalos).
