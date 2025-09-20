@@ -67,13 +67,13 @@ La variable **`petal_width`** presenta una media ≈ **1.20 cm**, SD ≈ **0.76 
 
 Además, el conjunto de datos presenta las siguientes características:
 
--    **Escala homogénea de medidas**: todas las variables cuantitativas están en la misma unidad (centímetros), lo que facilita comparaciones directas y análisis multivariados sin necesidad inmediata de reescalado.
+-   **Escala homogénea de medidas**: todas las variables cuantitativas están en la misma unidad (centímetros), lo que facilita comparaciones directas y análisis multivariados sin necesidad inmediata de reescalado.
 
--    **Posible colinealidad**: inspecciones preliminares sugieren que `petal_length` y `petal_width` están altamente correlacionadas, lo que puede condicionar modelos de regresión o técnicas de reducción de dimensionalidad (ej. PCA).
+-   **Posible colinealidad**: inspecciones preliminares sugieren que `petal_length` y `petal_width` están altamente correlacionadas, lo que puede condicionar modelos de regresión o técnicas de reducción de dimensionalidad (ej. PCA).
 
--    **Grupos biológicos claros**: las especies representan categorías naturales y balanceadas, condición poco común en datos ecológicos reales donde suele haber desbalance → este dataset es ideal como caso didáctico y de referencia.
+-   **Grupos biológicos claros**: las especies representan categorías naturales y balanceadas, condición poco común en datos ecológicos reales donde suele haber desbalance → este dataset es ideal como caso didáctico y de referencia.
 
--    **Potencial de discriminación**: dado el balance de clases y la separación conocida entre especies de Iris, el dataset es adecuado para ilustrar desde comparaciones descriptivas hasta modelos predictivos (GLM, LDA, clustering).
+-   **Potencial de discriminación**: dado el balance de clases y la separación conocida entre especies de Iris, el dataset es adecuado para ilustrar desde comparaciones descriptivas hasta modelos predictivos (GLM, LDA, clustering).
 
 ## Matriz de correlaciones y distribuciones entre variables numéricas
 
@@ -86,13 +86,13 @@ GGally::ggpairs(num_df, upper = list(continuous = wrap("cor", size = 3)))
 
 La matriz de gráficos (scatterplots + histogramas + coeficientes de correlación) permite evaluar de un vistazo correlaciones, distribuciones marginales y relaciones lineales o no lineales entre variables.
 
--    **Colinealidad fuerte**: `petal_length` y `petal_width` muestran correlación muy alta (r \> 0.9), lo que evidencia redundancia informativa.
+-   **Colinealidad fuerte**: `petal_length` y `petal_width` muestran correlación muy alta (r \> 0.9), lo que evidencia redundancia informativa.
 
--    **Correlaciones moderadas**: `sepal_length` correlaciona de forma consistente con `petal_length` (r ≈ 0.87), lo que sugiere que ambas crecen conjuntamente y pueden estar asociadas a un **gradiente de tamaño corporal general**.
+-   **Correlaciones moderadas**: `sepal_length` correlaciona de forma consistente con `petal_length` (r ≈ 0.87), lo que sugiere que ambas crecen conjuntamente y pueden estar asociadas a un **gradiente de tamaño corporal general**.
 
--    **Menor asociación**: `sepal_width` se muestra menos correlacionada con las demás, lo que indica que puede aportar información diferenciada en análisis multivariados.
+-   **Menor asociación**: `sepal_width` se muestra menos correlacionada con las demás, lo que indica que puede aportar información diferenciada en análisis multivariados.
 
--    **Separación por especie**: en las distribuciones univariadas y bivariadas se observa que las especies tienden a formar agrupamientos diferenciados, especialmente `setosa`, lo que sugiere potencial de clasificación/discriminación.
+-   **Separación por especie**: en las distribuciones univariadas y bivariadas se observa que las especies tienden a formar agrupamientos diferenciados, especialmente `setosa`, lo que sugiere potencial de clasificación/discriminación.
 
 -   **Linealidad vs no linealidad**: las nubes de puntos muestran relaciones aproximadamente lineales, aunque con cierto solapamiento entre *versicolor* y *virginica*, lo cual podría requerir modelos más flexibles en análisis predictivos.
 
@@ -102,7 +102,7 @@ La matriz de gráficos (scatterplots + histogramas + coeficientes de correlació
 
 En presencia de **alta colinealidad** (r \> 0.8), considerar retener solo una variable del par altamente correlacionado si el objetivo es simplificación. Emplear técnicas multivariadas (PCA, análisis discriminante) para reducir dimensionalidad y evitar inestabilidad en modelos de regresión.
 
-## Distribución de variables morfométricas entre especies 
+## Distribución de variables morfométricas entre especies
 
 ```{r}
 #| label: caja y bigotes

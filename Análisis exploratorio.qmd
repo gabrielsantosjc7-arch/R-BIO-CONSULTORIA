@@ -24,3 +24,14 @@ papersize: a4
 fontsize: 11pt
 geometry: margin=2.5cm
 ---
+
+```{r}
+# Librerías 
+library(tidyverse)   # Manipulación de datos: dplyr, tidyr, readr
+library(janitor)     # Limpieza: clean_names(), tabyl()
+library(ggplot2)     # Gráficos profesionales
+library(skimr)       # EDA rápido y completo (skim())
+library(GGally)      # Matriz de gráficos para variables múltiples
+library(knitr)       # Tablas en Quarto
+library(kableExtra)  # Tablas formateadas para informes
+```
